@@ -1,0 +1,26 @@
+{
+  "name": "orange-dragonfly-orm-model-to-sql",
+  "version": "0.7.0",
+  "description": "Converts Orange Dragonfly validator model to SQL CREATE TABLE syntax",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/charger88/orange-dragonfly-orm-model-to-sql.git"
+  },
+  "keywords": [
+    "database",
+    "sql",
+    "mysql"
+  ],
+  "author": {
+    "name": "Michael Kelner",
+    "email": "mikhail.kelner@gmail.com",
+    "url": "https://michaelkelner.com/"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/charger88/orange-dragonfly-orm-model-to-sql/issues"
+  },
+  "homepage": "https://github.com/charger88/orange-dragonfly-orm-model-to-sql#readme",
+  "dependencies": {}
+}
