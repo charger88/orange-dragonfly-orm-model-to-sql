@@ -50,7 +50,11 @@ class OrangeDragonflyORMSchemaToMySQL {
       field.push('NOT NULL')
     }
     if (rule.hasOwnProperty('default')) {
-      field.push(`DEFAULT ${rule.hasOwnProperty('default') ? `'${rule.default}'`: ''}`)
+      if (types.includes('boolean')) {
+        field.push(`DEFAULT ${rule.hasOwnProperty('default') ? `${rule.default ? 1 : 0}`: ''}`)
+      } else {
+        field.push(`DEFAULT ${rule.hasOwnProperty('default') ? `'${rule.default}'`: ''}`)
+      }
     } else if (types.includes('null')) {
       field.push('DEFAULT NULL')
     }
