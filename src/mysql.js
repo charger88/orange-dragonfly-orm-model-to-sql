@@ -50,7 +50,9 @@ class OrangeDragonflyORMSchemaToMySQL {
       field.push('NOT NULL')
     }
     if (rule.hasOwnProperty('default')) {
-      if (types.includes('boolean')) {
+      if (rule.default === null) {
+        field.push(`DEFAULT NULL`)
+      } else if (types.includes('boolean')) {
         field.push(`DEFAULT ${rule.hasOwnProperty('default') ? `${rule.default ? 1 : 0}`: ''}`)
       } else {
         field.push(`DEFAULT ${rule.hasOwnProperty('default') ? `'${rule.default}'`: ''}`)
