@@ -110,7 +110,7 @@ class OrangeDragonflyORMSchemaToMySQL {
     const queries = []
     for (let [index, is_unique] of Object.entries(indexes)) {
       if (is_unique) {
-        queries.push(`CREATE UNIQUE INDEX uq_${index.replace('.', '__').replaceAll('/', '___')} ON ${index.split('/')[0].split('.')[0]} (${index.split('/').map(v => v.split('.')[1]).join(', ')});`)
+        queries.push(`CREATE UNIQUE INDEX uq_${index.replaceAll('.', '__').replaceAll('/', '___')} ON ${index.split('/')[0].split('.')[0]} (${index.split('/').map(v => v.split('.')[1]).join(', ')});`)
       } else {
         queries.push(`CREATE INDEX ix_${index.replace('.', '__')} ON ${index.split('.')[0]} (${index.split('.')[1]});`)
       }

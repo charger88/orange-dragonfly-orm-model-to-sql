@@ -1,6 +1,6 @@
 {
   "name": "orange-dragonfly-orm-model-to-sql",
-  "version": "0.7.3",
+  "version": "0.7.4",
   "description": "Converts Orange Dragonfly validator model to SQL CREATE TABLE syntax",
   "main": "index.js",
   "repository": {
