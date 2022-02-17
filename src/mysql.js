@@ -85,12 +85,22 @@ class OrangeDragonflyORMSchemaToMySQL {
     const indexes = {}
     for (let rel of Object.values(model.available_relations)) {
       if ((rel.mode === 'child') || (rel.mode === 'children')) {
-        indexes[`${rel.b.table}.${rel._b_key_by_mode}`] = 'index'
+        indexes[`${rel.b.table}.${rel._b_key_by_mode}`] = false
       } else if ((rel.mode === 'parent')) {
-        indexes[`${rel.a.table}.${rel._a_key_by_mode}`] = 'index'
+        indexes[`${rel.a.table}.${rel._a_key_by_mode}`] = false
       } else {
-        indexes[`${rel.class_via.table}.${rel.via_a_key}`] = 'index'
-        indexes[`${rel.b.table}.${rel._b_key_by_mode}`] = 'index'
+        indexes[`${rel.class_via.table}.${rel.via_a_key}`] = false
+        indexes[`${rel.b.table}.${rel._b_key_by_mode}`] = false
+      }
+    }
+    return indexes
+  }
+
+  _generateUniqueIndexes(model) {
+    const indexes = {}
+    if (model.UNIQUE_KEYS) {
+      for (const fields of model.UNIQUE_KEYS) {
+        indexes[fields.map(v => `${model.table}.${v}`).join('/')] = true
       }
     }
     return indexes
@@ -98,8 +108,12 @@ class OrangeDragonflyORMSchemaToMySQL {
 
   _convertIndexesToSql(indexes) {
     const queries = []
-    for (let index of Object.keys(indexes)) {
-      queries.push(`CREATE INDEX ${indexes[index]}_${index.replace('.', '__')} ON ${index.split('.')[0]} (${index.split('.')[1]});`)
+    for (let [index, is_unique] of Object.entries(indexes)) {
+      if (is_unique) {
+        queries.push(`CREATE UNIQUE INDEX uq_${index.replace('.', '__').replaceAll('/', '___')} ON ${index.split('/')[0].split('.')[0]} (${index.split('/').map(v => v.split('.')[1]).join(', ')});`)
+      } else {
+        queries.push(`CREATE INDEX ix_${index.replace('.', '__')} ON ${index.split('.')[0]} (${index.split('.')[1]});`)
+      }
     }
     return queries
   }
@@ -115,7 +129,7 @@ class OrangeDragonflyORMSchemaToMySQL {
     for (const model of models) {
       queries.push(this._generateTableSQL(model))
       if (this._auto_indexes) {
-        Object.assign(indexes, this._generateIndexes(model))
+        Object.assign(indexes, this._generateIndexes(model), this._generateUniqueIndexes(model))
       }
     }
     if (this._auto_indexes) {
