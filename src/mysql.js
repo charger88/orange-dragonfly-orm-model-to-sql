@@ -89,7 +89,7 @@ class OrangeDragonflyORMSchemaToMySQL {
       } else if ((rel.mode === 'parent')) {
         indexes[`${rel.a.table}.${rel._a_key_by_mode}`] = false
       } else {
-        indexes[`${rel.class_via.table}.${rel.via_a_key}`] = false
+        indexes[`${rel.class_via.table}.${rel.via_a_key || `${rel.a.table}_id`}`] = false
         indexes[`${rel.b.table}.${rel._b_key_by_mode}`] = false
       }
     }
